@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import Box from './Box';
 import { BoxStatus } from './types';
 import styles from './row.module.scss';

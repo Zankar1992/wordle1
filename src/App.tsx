@@ -1,5 +1,6 @@
 import React from 'react'
-import Wordle from './Components/Wordle'
+import './App.css';
+import { Wordle } from './Components/Wordle';
 
 
 const App = () => {
@@ -10,4 +11,4 @@ const App = () => {
   )
 }
 
-export default App
+export default App;
