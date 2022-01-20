@@ -29,16 +29,15 @@ const Keyboard = ({
         </button>
       ))}
       <div className={styles.emptyKey}></div>
-      {Array.from(Array(10)).map((_, i) => (
-        <button key={i + 9} className={styles.key} onClick={handleInput}>
-          {keys[i + 9]}
+      {Array.from(Array(9)).map((_, i) => (
+        <button key={i + 10} className={styles.key} onClick={handleInput}>
+          {keys[i + 10]}
         </button>
       ))}
-      <div className={styles.enterKey}></div>
       <button className={styles.key} onClick={handleEnter}>
         ENTER
       </button>
-      {Array.from(Array(10)).map((_, i) => (
+      {Array.from(Array(7)).map((_, i) => (
         <button key={i + 19} className={styles.key} onClick={handleInput}>
           {keys[i + 19]}
         </button>
