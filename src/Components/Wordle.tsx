@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import useWindow from '../Hooks/useWindow';
-import { getWordOfTheDay } from '../Service/request';
+import { useEffect, useState } from "react";
+import useWindow from "../Hooks/useWindow";
+import { getWordOfTheDay, isValidWord } from "../Service/request";
+import Keyboard from "./Keyboard";
+import Modal from "./Modal";
+import RowCompleted from "./RowCompleted";
+import RowCurrent from "./RowCurrent";
+import RowEmpty from "./RowEmpty";
+import { GameStatus } from "./types";
 
-import RowCompleted from './RowCompleted';
-import RowCurrent from './RowCurrent';
-import RowEmpty from './RowEmpty';
-import { GameStatus } from './types';
+import styles from "./wordle.module.scss";
 
 const keys = [
   "Q",
@@ -36,83 +39,112 @@ const keys = [
   "M",
 ];
 
-const Wordle = () => {
-  const [wordOfTheDay, setWordOfTheDay] = useState<string>('');
+export default function Wordle() {
+  const [wordOfTheDay, setWordOfTheDay] = useState<string>("");
   const [turn, setTurn] = useState<number>(1);
   const [currentWord, setCurrentWord] = useState<string>("");
   const [completedWords, setCompletedWords] = useState<string[]>([]);
   const [gameStatus, setGameStatus] = useState<GameStatus>(GameStatus.Playing);
 
-
   useWindow("keydown", handleKeyDown);
 
   useEffect(() => {
-    setWordOfTheDay(getWordOfTheDay());      //kayo character word sathe match thay che aey effect show kare che
+    setWordOfTheDay(getWordOfTheDay());
   }, []);
 
-  const handleKeyDown = (event: KeyboardEvent) => {
-    const letter = event.key.toUpperCase();
+  function handleKeyDown(event: KeyboardEvent) {
+    const key = event.key.toUpperCase();
 
-    if (gameStatus === GameStatus.Playing) {
+    onKeyPressed(key);
+  }
+
+  function onKeyPressed(key: string) {
+    if (gameStatus !== GameStatus.Playing) {
       return;
     }
 
-    if (event.key === 'Backspace' && currentWord.length > 0) {
+    if (key === "BACKSPACE" && currentWord.length > 0) {
       onDelete();
       return;
     }
-    if (event.key === 'Enter' && currentWord.length === 5 && turn <= 6) {
+
+    if (key === "ENTER" && currentWord.length === 5 && turn <= 6) {
       onEnter();
       return;
     }
-    if (currentWord.length >= 5) {
-      return;
-    }
-    if (keys.includes(letter)) {
-      onInput(letter);
+
+    if (currentWord.length >= 5) return;
+
+    // ingresar la letra al estado
+    if (keys.includes(key)) {
+      onInput(key);
       return;
     }
   }
 
-  const onInput = (letter: string) => {
+  function onInput(letter: string) {
     const newWord = currentWord + letter;
     setCurrentWord(newWord);
   }
 
-  const onDelete = () => {
+  function onDelete() {
     const newWord = currentWord.slice(0, -1);
     setCurrentWord(newWord);
   }
 
-  const onEnter = () => {
+  async function onEnter() {
     if (currentWord === wordOfTheDay) {
-      setCompletedWords([...completedWords, currentWord])
+      //ganó el usuario
+      setCompletedWords([...completedWords, currentWord]);
       setGameStatus(GameStatus.Won);
       return;
     }
-  }
 
-  if (turn === 6) {
-    setCompletedWords([...completedWords, currentWord]);      // 6 time word type kari sakay then game lost
-    setGameStatus(GameStatus.Lost);
-    return;
-  }
+    if (turn === 6) {
+      //perdió el usuario
+      setCompletedWords([...completedWords, currentWord]);
+      setGameStatus(GameStatus.Lost);
+      return;
+    }
 
-  if(currentWord.length === 5 && !isValidWord(currentWord)){
-    alert('Not a Valid Word');
-    return;
-  }
+    // validar si existe la palabra
+    const validWord = await isValidWord(currentWord);
 
-  setCompletedWords([...completedWords, currentWord]);
-  setTurn(turn + 1);
-  setCurrentWord("");
+    if (currentWord.length === 5 && !validWord) {
+      alert("Not a valid word");
+      return;
+    }
+
+    setCompletedWords([...completedWords, currentWord]);
+    setTurn(turn + 1);
+    setCurrentWord("");
+  }
 
   return (
     <>
-      <div>
+      {gameStatus === GameStatus.Won ? (
+        <Modal
+          type="won"
+          completedWords={completedWords}
+          solution={wordOfTheDay}
+        />
+      ) : gameStatus === GameStatus.Lost ? (
+        <Modal
+          type="lost"
+          completedWords={completedWords}
+          solution={wordOfTheDay}
+        />
+      ) : null}
+      <div className={styles.mainContainer}>
         {completedWords.map((word, i) => (
-          <RowCompleted word={word} solution={wordOfTheDay} />
+          <RowCompleted
+            key={i}
+            word={word}
+            solution={wordOfTheDay}
+            // animate={true}
+          />
         ))}
+
         {gameStatus === GameStatus.Playing ? (
           <RowCurrent word={currentWord} />
         ) : null}
@@ -121,8 +153,9 @@ const Wordle = () => {
           <RowEmpty key={i} />
         ))}
       </div>
+
+      <Keyboard keys={keys} onKeyPressed={onKeyPressed} />
     </>
   );
 }
 
-export default Wordle;
