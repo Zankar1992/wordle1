@@ -34,7 +34,7 @@ const Keyboard = ({
           {keys[i + 10]}
         </button>
       ))}
-      <button className={styles.key} onClick={handleEnter}>
+      <button className={styles.enterKey} onClick={handleEnter}>
         ENTER
       </button>
       {Array.from(Array(7)).map((_, i) => (

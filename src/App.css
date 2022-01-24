@@ -1,5 +1,9 @@
 
 body {
-  background-color: black;
+  background-color: white;
   font-family: arial,Arial, Helvetica, sans-serif;
+}
+
+.h2{
+  text-align: center;
 }
