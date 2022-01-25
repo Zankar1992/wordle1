@@ -2,8 +2,14 @@
 body {
   background-color: white;
   font-family: arial,Arial, Helvetica, sans-serif;
+  overflow: hidden;
 }
 
-.h2{
+.header{
   text-align: center;
+  margin: 1px;
+}
+.hr{
+  width: 25rem;
+  color: lightgray;
 }

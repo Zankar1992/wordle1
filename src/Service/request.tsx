@@ -10,8 +10,7 @@ export const getWordOfTheDay = () => {
   return wordOfTheDay.toUpperCase();
 }
 
-export const isValidWord = async (word: string) => {
-  // link pachal koi pn word type karo to aey page jaine api call thase
+export const isValidWord = async (word: string) => {  
   try {
     const URL = "https://api.dictionaryapi.dev/api/v2/entries/en/" + word;  //online dictionery api link 
     const response = await fetch(URL);
@@ -23,9 +22,8 @@ export const isValidWord = async (word: string) => {
     console.log(e);
     return false;
   }
-  // const words = getWords();
-  // return words.includes(word.toLowerCase());
 }
+
 
 const getDayOfTheYear = () => {
   const now = new Date();
@@ -35,6 +33,6 @@ const getDayOfTheYear = () => {
     (start as any) +
     (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000
 
-  const oneDay = 1000 * 60 * 60 * 24;
+  const oneDay = 1000 * 60 * 60 * 24;     //1 sec = 1000 milisec,60 minute,24 hour  
   return Math.floor(diff / oneDay);
 }

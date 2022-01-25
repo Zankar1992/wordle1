@@ -5,11 +5,12 @@
   font-weight: bold;
   width: $size;
   height: $size;
-  border: solid 1px gray;
+  border: solid 1px #86888a;
   color: black;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0rem;
 }
 
 .correct{

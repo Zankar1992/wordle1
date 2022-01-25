@@ -12,8 +12,8 @@ interface SquareProps {
   word: string;
   solution: string;
 }
-  
-const Modal = ({ type, completedWords, solution }: ModalProps)=> {
+
+const Modal = ({ type, completedWords, solution }: ModalProps) => {
   const Square = ({ word, solution }: SquareProps) => {
     const checkLetter = (letter: string, pos: number): string => {
       if (solution.includes(letter)) {

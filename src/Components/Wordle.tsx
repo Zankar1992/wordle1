@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useWindow from "../Hooks/useWindow";
 import { getWordOfTheDay, isValidWord } from "../Service/request";
-// import Header from "./Header";
+import Header from "./Header";
 import Keyboard from "./Keyboard";
 import Modal from "./Modal";
 import RowCompleted from "./RowCompleted";
@@ -74,7 +74,8 @@ export default function Wordle() {
       return;
     }
 
-    if (currentWord.length >= 5) return;
+    if (currentWord.length >= 5) 
+      return;
 
     if (keys.includes(key)) {
       onInput(key);
@@ -108,8 +109,7 @@ export default function Wordle() {
     const validWord = await isValidWord(currentWord);
 
     if (currentWord.length === 5 && !validWord) {
-      // alert("Not a valid word");
-      alert(JSON.stringify('Not a valid word'));
+      alert("Not a valid word");
       return;
     }
 
@@ -120,7 +120,7 @@ export default function Wordle() {
 
   return (
     <>
-      {/* <Header /> */}
+      <Header />
       {gameStatus === GameStatus.Won ? (
         <Modal
           type="won"
