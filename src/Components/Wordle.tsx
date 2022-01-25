@@ -74,8 +74,7 @@ export default function Wordle() {
       return;
     }
 
-    if (currentWord.length >= 5) 
-      return;
+    if (currentWord.length >= 5) return;
 
     if (keys.includes(key)) {
       onInput(key);

@@ -24,7 +24,7 @@ const RowCompleted = ({ word, solution }: RowCompletedProps) => {
   }
 
   return (
-    <div className={styles.row}>   
+    <div className={styles.row}>
       {Array.from(Array(5)).map((_,i) => (
         <Box key={i} value={word[i]} status={checkLetter(word[i], i)} />
       ))}
